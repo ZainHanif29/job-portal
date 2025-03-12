@@ -11,8 +11,8 @@ import applicationRoute from "./routes/application.route.js";
 dotenv.config({});
 const app = express();
 const corsOption = {
-  origin: "http//localhost:5173",
-  Credentials: true,
+  origin: "http://localhost:5173",
+  credentials: true,
 };
 // middleware
 app.use(express.json());
