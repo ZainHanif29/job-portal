@@ -6,8 +6,12 @@ import { RadioGroup } from "@/components/ui/radio-group";
 import { USER_API_END_POINT } from "@/utils/constants";
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import store from "@/redux/store";
+import { setLoading } from "@/redux/slice/authSlice";
+import { Loader2 } from "lucide-react";
 
 const Signup = () => {
   const [input, setInput] = useState({
@@ -19,6 +23,8 @@ const Signup = () => {
     file: "",
   });
   const navigate = useNavigate();
+  const { loading } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -28,7 +34,7 @@ const Signup = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      console.log(input);
+      dispatch(setLoading(true));
       const formData = new FormData();
       formData.append("fullName", input.fullName);
       formData.append("email", input.email);
@@ -51,6 +57,8 @@ const Signup = () => {
       } else {
         toast.error("Something went wrong. Please try again.");
       }
+    } finally {
+      dispatch(setLoading(false));
     }
   };
   return (
@@ -141,9 +149,15 @@ const Signup = () => {
               />
             </div>
           </div>
-          <Button type="submit" className="w-full my-4">
-            Signup
-          </Button>
+          {loading ? (
+            <Button disabled={true} className="w-full my-4">
+              <Loader2 className="w-4 h-4 my-2 animate-spin" /> Please wait...
+            </Button>
+          ) : (
+            <Button type="submit" className="w-full my-4">
+              Signup
+            </Button>
+          )}
           <span className="text-sm">
             Already have an account?{" "}
             <Link to="/login" className="text-blue-600">
