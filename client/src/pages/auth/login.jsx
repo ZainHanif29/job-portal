@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { setLoading } from "@/redux/slice/authSlice";
+import { setLoading, setUser } from "@/redux/slice/authSlice";
 import store from "@/redux/store";
 import { USER_API_END_POINT } from "@/utils/constants";
 import axios from "axios";
@@ -34,6 +34,7 @@ const Login = () => {
         withCredentials: true,
       });
       if (res.data.success) {
+        dispatch(setUser(res.data.user));
         toast.success(res.data.message);
         navigate("/");
       }
