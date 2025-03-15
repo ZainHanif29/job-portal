@@ -65,7 +65,9 @@ const Navbar = () => {
                 <div className="flex flex-col">
                   <div className="flex items-center">
                     <User2 />
-                    <Button variant="link">View Profile</Button>
+                    <Link to="/profile">
+                      <Button variant="link">View Profile</Button>
+                    </Link>
                   </div>
                   <div className="flex items-center">
                     <LogOut />
