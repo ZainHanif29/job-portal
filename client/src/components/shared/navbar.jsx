@@ -22,6 +22,9 @@ const Navbar = () => {
       });
       if (res.data.success) {
         dispatch(setUser(null));
+        // dispatch(setLoading(false));
+        // dispatch(setAllJobs([]));
+        // dispatch(setSingleJob(null));
         navigate("/");
         toast(`${res.data.message || "Logout"}`);
       }

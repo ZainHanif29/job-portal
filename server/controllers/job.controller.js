@@ -17,7 +17,7 @@ export const postJob = async (req, res) => {
     if (
       !title ||
       !description ||
-      !requirements ||
+      // !requirements ||
       !salary ||
       !location ||
       !jobType ||
@@ -29,10 +29,13 @@ export const postJob = async (req, res) => {
         .status(400)
         .json({ status: false, message: "All fields are required." });
     }
+    if (requirements) {
+      requirements = requirements.split(",");
+    }
     const job = await Job.create({
       title,
       description,
-      requirements: requirements.split(","),
+      requirements,
       salary: Number(salary),
       location,
       jobType,

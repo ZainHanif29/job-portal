@@ -1,6 +1,5 @@
 import React from "react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { data } from "react-router-dom";
 import { Label } from "./ui/label";
 
 const filterData = [
@@ -24,11 +23,11 @@ const FilterCard = () => {
       <hr className="mt-3" />
       <RadioGroup>
         {filterData.map((data, index) => (
-          <div>
+          <div key={index}>
             <h1 className="font-bold text-lg">{data.filterType}</h1>
 
             {data.array.map((item, index) => (
-              <div className="flex items-center space-x-2 my-2">
+              <div key={index} className="flex items-center space-x-2 my-2">
                 <RadioGroupItem value={item} />
                 <Label>{item}</Label>
               </div>
