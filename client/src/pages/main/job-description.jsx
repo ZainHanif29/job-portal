@@ -2,21 +2,58 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { setSingleJob } from "@/redux/slice/jobSlice";
 import store from "@/redux/store";
-import { JOB_API_END_POINT } from "@/utils/constants";
+import {
+  APPLICATION_API_END_POINT,
+  JOB_API_END_POINT,
+} from "@/utils/constants";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const JobDescription = () => {
-  const params = useParams();
-  const dispatch = useDispatch();
   const { singleJob } = useSelector((store) => store.job);
   const { user } = useSelector((store) => store.auth);
+  const isInitiallyApplied =
+    singleJob?.applications?.some((ID) => ID.applicant === user?._id) || false;
+  const [isApplied, setIsApplied] = useState(isInitiallyApplied);
+  const params = useParams();
   const jobId = params.id;
-  const isApplied =singleJob?.applications?.some((ID) => ID.applicant === user?.id) || false;
-  // const isApplied = false;
+  const dispatch = useDispatch();
+  const applyJobHandler = async () => {
+    try {
+      const res = await axios.get(
+        `${APPLICATION_API_END_POINT}/apply/${jobId}`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        setIsApplied(true);
+        // const updateSingleJob = {
+        //   ...singleJob,
+        //   applications: [...singleJob.applications, { applicant: user?._id }],
+        // };
+        const updateSingleJob = {
+          ...singleJob,
+          applications: [
+            ...(singleJob.applications || []),
+            { applicant: user?._id },
+          ],
+        };
+        dispatch(setSingleJob(updateSingleJob));
+        toast(res.data.message);
+      } else {
+        toast("check");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    }
+  };
   useEffect(() => {
     const fetchSingleJob = async () => {
       try {
@@ -25,7 +62,11 @@ const JobDescription = () => {
         });
         if (res.data.success) {
           dispatch(setSingleJob(res.data.job));
-          console.log(res.data.job);
+          setIsApplied(
+            res.data.job.applications?.some(
+              (app) => app.applicant === user?._id
+            )
+          );
         }
       } catch (error) {
         console.error(error);
@@ -57,9 +98,7 @@ const JobDescription = () => {
           </div>
         </div>
         <Button
-          onClick={() => {
-            console.log("Click");
-          }}
+          onClick={applyJobHandler}
           disabled={isApplied}
           className={`rounded-lg ${
             isApplied
