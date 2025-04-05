@@ -7,16 +7,25 @@ import Job from "./pages/main/job";
 import Browse from "./pages/main/browse";
 import Profile from "./pages/main/profile";
 import JobDescription from "./pages/main/job-description";
+import Companies from "./pages/admin/companies";
+import CreateCompany from "./pages/admin/company-create";
+import CompanySetup from "./pages/admin/company-setup.";
 
 function App() {
   const appRouter = createBrowserRouter([
+    // Student
     { path: "/", element: <Home /> },
     { path: "/job", element: <Job /> },
     { path: "/browse", element: <Browse /> },
     { path: "/profile", element: <Profile /> },
     { path: "/description/:id", element: <JobDescription /> },
+    // Auth
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <Signup /> },
+    // Admin
+    { path: "/admin/companies", element: <Companies /> },
+    { path: "/admin/companies/create", element: <CreateCompany /> },
+    { path: "/admin/companies/:id", element: <CompanySetup /> },
   ]);
   return (
     <>

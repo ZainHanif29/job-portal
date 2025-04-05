@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import store from "@/redux/store";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constants";
-import { setUser } from "@/redux/slice/authSlice";
+import { setLoading, setUser } from "@/redux/slice/authSlice";
 import { toast } from "sonner";
+import { setCompanies, setSingleCompany } from "@/redux/slice/companySlice";
+import { setAllJobs, setSingleJob } from "@/redux/slice/jobSlice";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
@@ -21,10 +23,12 @@ const Navbar = () => {
         withCredentials: true,
       });
       if (res.data.success) {
+        dispatch(setLoading(false));
+        dispatch(setAllJobs([]));
+        dispatch(setSingleJob(null));
+        dispatch(setSingleCompany(null));
+        dispatch(setCompanies([]));
         dispatch(setUser(null));
-        // dispatch(setLoading(false));
-        // dispatch(setAllJobs([]));
-        // dispatch(setSingleJob(null));
         navigate("/");
         toast(`${res.data.message || "Logout"}`);
       }
@@ -49,15 +53,28 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-12">
           <ul className="flex font-medium items-center gap-5">
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/job">Jobs</Link>
-            </li>
-            <li>
-              <Link to="/browse">Browse</Link>
-            </li>
+            {user && user.role === "recruiter" ? (
+              <>
+                <li>
+                  <Link to="/admin/companies">Companies</Link>
+                </li>
+                <li>
+                  <Link to="/admin/jobs">Jobs</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/job">Jobs</Link>
+                </li>
+                <li>
+                  <Link to="/browse">Browse</Link>
+                </li>
+              </>
+            )}
           </ul>
           {!user ? (
             <div className="flex items-center gap-1">
@@ -104,12 +121,14 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <div className="flex items-center">
-                    <User2 />
-                    <Link to="/profile">
-                      <Button variant="link">View Profile</Button>
-                    </Link>
-                  </div>
+                  {user && user.role === "student" && (
+                    <div className="flex items-center">
+                      <User2 />
+                      <Link to="/profile">
+                        <Button variant="link">View Profile</Button>
+                      </Link>
+                    </div>
+                  )}
                   <div className="flex items-center">
                     <LogOut />
                     <Button variant="link" onClick={logOutHandler}>
