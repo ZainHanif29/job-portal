@@ -2,9 +2,12 @@ import { setAllJobs } from "@/redux/slice/jobSlice";
 import { JOB_API_END_POINT } from "@/utils/constants";
 import axios from "axios";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import store from "@/redux/store";
 
 const useGetAllJobs = () => {
+  const { user } = useSelector((store) => store.auth);
+
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchAllJobs = async () => {
@@ -24,7 +27,9 @@ const useGetAllJobs = () => {
         }
       }
     };
-    fetchAllJobs();
+    if (user?.role === "student") {
+      fetchAllJobs();
+    }
   }, []);
 };
 

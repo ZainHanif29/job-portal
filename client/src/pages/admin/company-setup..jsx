@@ -2,6 +2,7 @@ import Navbar from "@/components/shared/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useGetCompanyById from "@/hooks/useGetCompanyById";
 import store from "@/redux/store";
 import { COMPANY_API_END_POINT } from "@/utils/constants";
 import axios from "axios";
@@ -24,14 +25,15 @@ const CompanySetup = () => {
   const { singleCompany } = useSelector((store) => store.company);
   const params = useParams();
   const navigate = useNavigate();
+  useGetCompanyById(params.id);
   useEffect(
     () =>
       setInput({
-        name: singleCompany.name || "",
-        description: singleCompany.description || "",
-        website: singleCompany.website || "",
-        location: singleCompany.location || "",
-        file: singleCompany.file || null,
+        name: singleCompany?.name || "",
+        description: singleCompany?.description || "",
+        website: singleCompany?.website || "",
+        location: singleCompany?.location || "",
+        file: singleCompany?.file || null,
       }),
     [singleCompany]
   );
@@ -85,18 +87,18 @@ const CompanySetup = () => {
     <div>
       <Navbar />
       <div className="max-w-xl mx-auto my-10">
+        <div className="flex items-center gap-5 p-8">
+          <Button
+            variant="outline"
+            onClick={() => navigate("/admin/companies")}
+            className="flex items-center gap-2 to-gray-500 font-semibold"
+          >
+            <ArrowLeft />
+            <span>Back</span>
+          </Button>
+          <h1 className="font-bold text-xl">Company Setup</h1>
+        </div>
         <form onSubmit={submitHandler}>
-          <div className="flex items-center gap-5 p-8">
-            <Button
-              variant="outline"
-              onClick={() => navigate("/admin/companies")}
-              className="flex items-center gap-2 to-gray-500 font-semibold"
-            >
-              <ArrowLeft />
-              <span>Back</span>
-            </Button>
-            <h1 className="font-bold text-xl">Company Setup</h1>
-          </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
               <Label>Company Name</Label>
