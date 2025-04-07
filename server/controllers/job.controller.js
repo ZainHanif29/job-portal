@@ -2,7 +2,7 @@ import { Job } from "../models/job.model.js";
 
 export const postJob = async (req, res) => {
   try {
-    const {
+    let {
       title,
       description,
       requirements,
@@ -17,7 +17,7 @@ export const postJob = async (req, res) => {
     if (
       !title ||
       !description ||
-      // !requirements ||
+      !requirements ||
       !salary ||
       !location ||
       !jobType ||
@@ -112,7 +112,9 @@ export const getJobById = async (req, res) => {
 export const getAdminJobs = async (req, res) => {
   try {
     const adminId = req.id;
-    const jobs = await Job.find({ created_by: adminId });
+    const jobs = await Job.find({ created_by: adminId }).populate({
+      path: "company",
+    });
     if (!jobs) {
       return res.status(404).json({
         success: false,

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { Bookmark } from "lucide-react";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import logo from "/company-logo.png";
 import { Badge } from "./ui/badge";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,10 @@ const JobCard = ({ job }) => {
       <div className="flex items-center gap-2 my-2">
         <Button variant="outline" size="icon" className="p-6">
           <Avatar>
-            <AvatarImage src={logo} />
+            <AvatarImage src={job?.logo} />
+            <AvatarFallback className="text-2xl text-blue-700">
+              {job?.company?.name?.[0].toUpperCase()}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </div>
