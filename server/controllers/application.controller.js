@@ -115,7 +115,7 @@ export const updatedStatus = async (req, res) => {
         message: "Application not found",
       });
     }
-    application.status = status.tolowerCase();
+    application.status = status.toLowerCase();
     await application.save();
     return res.status(200).json({
       success: true,

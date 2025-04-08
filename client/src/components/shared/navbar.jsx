@@ -10,8 +10,18 @@ import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constants";
 import { setLoading, setUser } from "@/redux/slice/authSlice";
 import { toast } from "sonner";
-import { setCompanies, setSingleCompany } from "@/redux/slice/companySlice";
-import { setAllJobs, setSingleJob } from "@/redux/slice/jobSlice";
+import {
+  setCompanies,
+  setSearchCompanyByText,
+  setSingleCompany,
+} from "@/redux/slice/companySlice";
+import {
+  setAllAdminJobs,
+  setAllJobs,
+  setSearchJobByText,
+  setSingleJob,
+} from "@/redux/slice/jobSlice";
+import { setApplicants } from "@/redux/slice/applicationSlice";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
@@ -23,11 +33,19 @@ const Navbar = () => {
         withCredentials: true,
       });
       if (res.data.success) {
-        dispatch(setLoading(false));
+        // job
         dispatch(setAllJobs([]));
         dispatch(setSingleJob(null));
+        dispatch(setAllAdminJobs([]));
+        dispatch(setSearchJobByText(""));
+        // company
         dispatch(setSingleCompany(null));
         dispatch(setCompanies([]));
+        dispatch(setSearchCompanyByText(""));
+        //Application
+        dispatch(setApplicants([]));
+        // auth
+        dispatch(setLoading(false));
         dispatch(setUser(null));
         navigate("/");
         toast(`${res.data.message || "Logout"}`);
