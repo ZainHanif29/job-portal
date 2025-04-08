@@ -13,6 +13,7 @@ import CompanySetup from "./pages/admin/company-setup.";
 import Jobs from "./pages/admin/jobs";
 import JobCreate from "./pages/admin/job-create";
 import Applicants from "./pages/admin/applicants";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -26,12 +27,54 @@ function App() {
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <Signup /> },
     // Admin
-    { path: "/admin/companies", element: <Companies /> },
-    { path: "/admin/companies/create", element: <CreateCompany /> },
-    { path: "/admin/companies/:id", element: <CompanySetup /> },
-    { path: "/admin/jobs", element: <Jobs /> },
-    { path: "/admin/job/create", element: <JobCreate /> },
-    { path: "/admin/job/:id/applicants", element: <Applicants /> },
+    {
+      path: "/admin/companies",
+      element: (
+        <ProtectedRoute>
+          <Companies />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/companies/create",
+      element: (
+        <ProtectedRoute>
+          <CreateCompany />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/companies/:id",
+      element: (
+        <ProtectedRoute>
+          <CompanySetup />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/jobs",
+      element: (
+        <ProtectedRoute>
+          <Jobs />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/job/create",
+      element: (
+        <ProtectedRoute>
+          <JobCreate />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/job/:id/applicants",
+      element: (
+        <ProtectedRoute>
+          <Applicants />
+        </ProtectedRoute>
+      ),
+    },
   ]);
   return (
     <>

@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { USER_API_END_POINT } from "@/utils/constants";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ const Signup = () => {
     file: "",
   });
   const navigate = useNavigate();
-  const { loading } = useSelector((store) => store.auth);
+  const { user, loading } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -61,6 +61,11 @@ const Signup = () => {
       dispatch(setLoading(false));
     }
   };
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  });
   return (
     <div>
       <Navbar />
