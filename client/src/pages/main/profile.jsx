@@ -10,9 +10,11 @@ import AppliedJobTable from "@/components/applied-job-table";
 import UpdateProfileDialog from "@/components/update-profile-dialog";
 import { useSelector } from "react-redux";
 import store from "@/redux/store";
+import useGetAppliedJob from "@/hooks/useGetAppliedJob";
 
 const skills = ["HTML", "CSS", "JAVASCRIPT", "REACT"];
 const Profile = () => {
+  useGetAppliedJob();
   const [open, setOpen] = useState(false);
   const { user } = useSelector((store) => store.auth);
   return (

@@ -2,7 +2,10 @@ import React from "react";
 import LatestJobCard from "./latest-job-card";
 import { useSelector } from "react-redux";
 import store from "@/redux/store";
+import useGetAllJobs from "@/hooks/useGetAllJobs";
 const LatestJobs = () => {
+  useGetAllJobs();
+
   const { allJobs } = useSelector((store) => store.job);
   return (
     <div className="max-w-7xl mx-auto my-20">
